@@ -20,39 +20,82 @@ The framework operates on a triple-layer security stack:
 
 ## 3. Deployment & Operation Manual
 
+### 🔄 Execution Flow
+```text
+[ CLIENT SIDE ]                      [ TOKENCLAW HUB ]
+       |                                     |
+       |-- 1. Request Authorization -------->|
+       |      (Encrypted Token Handshake)    |
+       |                                     |
+       |<-- 2. Validate & Grant DR ----------|
+       |      (Status: 200 OK)               |
+       |                                     |
+[ UNLOCKING ASSET ]                          |
+       |-- 3. In-Memory Decryption           |
+       |-- 4. RTL Logic Execution            |
+       |-- 5. TRACE PURGE (Safe Exit)        |
+       v                                     |
+[ LOGIC PROTECTED ] <------------------------|
+
 ### 🛠 System Requirements
 - **Environment**: Linux/Termux (Android)
 - **EDA Tools**: Icarus Verilog 12.0
 - **Language**: Python 3.10+ (Flask, Requests)
 
-### Step 1: Initialize the TokenClaw Hub
-Start the central verification server on your control device. This server maintains the `token_database.json`.
+## 3. Operational Walkthrough (Step-by-Step)
+
+To ensure the security of the logic assets, follow this exact sequence to initialize the TokenClaw-DR gateway.
+
+### Step 1: Launch the Verification Hub (Server Side)
+Open your terminal (e.g., Termux or Linux Bash) and start the central authentication server. This acts as the "Brain" of the authorization network.
 ```bash
 python mao_server.py
-Confirmation: Look for Running on http://0.0.0.0:5000.
 
-​Step 2: Grant Distribution Rights (Admin)
-​Issue a unique Token for a client (e.g., Intel, OCP partners) using the management panel.
+​What to look for: The terminal should display Running on http://0.0.0.0:5000.
+​Status: Keep this window OPEN and running. Do not close it, or all authorization requests will fail.
+
+​Step 2: Issue a Distribution Token (Admin Side)
+​Open a NEW terminal session (Swipe right in Termux and click "New Session"). We will now generate a unique access credential.
+
 python mao_admin.py
-​Enter Client Name, Asset ID, and Expiry Days.
-​Copy the generated Token (Format: MAO-XXXX
 
-​Step 3: Remote Logic Activation (Client)
-​The client executes the langchain_remote_gate.py with the provided Token.
+Interaction:
+​Enter the client's name (e.g., Dan_Intel).
+​Define the asset ID (e.g., ChaKou_Core).
+​Enter validity period in days (e.g., 365).
+​Result: The system will print a Token like MAO-1C97XXXXXXXX.
+​Action: Long-press to COPY this token string immediately.
+
+Step 3: Configure the Client Gate (Authorization Setup)
+​Before running the client, you must "hand" the token to the security gate.
+
+nano langchain_remote_gate.py
+
+Edit: Find the line self.token = "...".
+​Important: Paste your copied Token between the double quotes.
+​Incorrect: self.token = MAO-123 (Causes SyntaxError)
+​Correct: self.token = "MAO-123"
+​Save: Press Ctrl+O, then Enter, then Ctrl+X to exit.
+
+Step 4: Execute Remote Logic Simulation (Client Side)
+​Now, trigger the automated verification and simulation process.
+
 python langchain_remote_gate.py
 
-Automated Workflow:
-​Handshake: Client requests permission from the Hub.
-​Unlock: Upon success, the .v.enc asset is decrypted.
-​Simulation: Icarus Verilog runs the hardware logic.
-​Purge: The gate executes an automatic cleanup of all plaintext files and memory traces.
+🔍 What Happens Next? (Automated Workflow)
+Once you press Enter in Step 4, the TokenClaw-DR architecture executes the following:
+1.Handshake: The gate sends the Token to the Hub (started in Step 1).
+2.​Audit: The Hub checks the database and returns a "Success" status code (200).
+3.​Decryption: The system dynamically decrypts the chakou_logic.v.enc asset in-memory.
+​4.Simulation: Icarus Verilog is automatically invoked to run the logic verification.
+​5.Purge: The gate performs a Deep Cleanup, deleting all plaintext files and memory traces to prevent logic leakage.
 
-4. Hardware Roadmap
-​3D Logic Locking: Multi-layer intercept for stacked die security.
-​Process Nodes: Validated for 3nm and 12nm tape-out pipelines.
-​AI Integration: Native support for LLM-driven autonomous chip auditing.
+​4. System Roadmap
+​Node Compatibility: Validated for 3nm and 12nm tape-out pipelines.
+​AI Protocol: Native integration for LLM-driven autonomous logic auditing.
+​Cross-Device Auth: Supports remote authorization across different physical IPs.
 
-​5. License & Attribution
+5. License & Attribution
 ​Copyright (c) 2026 Mao Guanghui. All rights reserved.
 ​This project is licensed under the Mao Merit-Based License 1.0 (MMBL):
 ​Logic over Background: Technical integrity is the sole criterion for evaluation.
