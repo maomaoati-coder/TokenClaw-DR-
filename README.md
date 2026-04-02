@@ -1,12 +1,12 @@
-# TokenClaw-DR (Distribution Rights)
-> **Advanced Remote Logic Authorization & Distribution Framework for 3D-ICs**
+TokenClaw-DR (Distribution Rights)
+​A Centralized Remote Token Authorization & Logic Distribution Framework 
 
 ![Security](https://img.shields.io/badge/Security-Physical--Layer--Intercept-red?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Silicon--Ready--Simulation-green?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-Mao--Merit--1.0-orange?style=for-the-badge)
 
 ## 1. Executive Summary
-**TokenClaw-DR** is a proprietary security enforcement architecture designed by Independent Chip Architect **Mao Guanghui**. It implements a high-precision "Claw" mechanism that intercepts logic execution paths at the physical layer. By integrating the **ChaKou Protocol**, it allows IP owners to manage **Distribution Rights (DR)** remotely, ensuring that sensitive RTL logic remains inert until a cryptographically secure Token is validated via a remote handshake.
+​TokenClaw-DR is a specialized logic security framework designed by Independent Chip Architect Mao Guanghui. Its primary objective is to provide a robust, remote-controlled Token Authorization System for proprietary logic assets. By implementing a high-precision "Claw" intercept mechanism through the ChaKou Protocol, it ensures that logical entities remain inactive and secure until a cryptographically verified Token is validated via a real-time remote handshake.
 
 ---
 
